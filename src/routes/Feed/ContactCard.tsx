@@ -1,5 +1,5 @@
 import styled from "@emotion/styled"
-import React from "react"
+import React, { useState } from "react"
 import {
   AiFillLinkedin,
   AiOutlineGithub,
@@ -10,6 +10,8 @@ import { CONFIG } from "site.config"
 import { Emoji } from "src/components/Emoji"
 
 const ContactCard: React.FC = () => {
+  const [showEmail, setShowEmail] = useState(false)
+
   return (
     <>
       <StyledTitle>
@@ -37,15 +39,15 @@ const ContactCard: React.FC = () => {
           </a>
         )}
         {CONFIG.profile.email && (
-          <a
-            href={`mailto:${CONFIG.profile.email}`}
-            rel="noreferrer"
-            target="_blank"
-            css={{ overflow: "hidden" }}
+          <div
+            className="email-row"
+            onClick={() => setShowEmail(!showEmail)}
           >
             <AiOutlineMail className="icon" />
-            <div className="name">email</div>
-          </a>
+            <div className="name">
+              {showEmail ? CONFIG.profile.email : "email"}
+            </div>
+          </div>
         )}
         {CONFIG.profile.linkedin && (
           <a
@@ -75,7 +77,7 @@ const StyledWrapper = styled.div`
   border-radius: 1rem;
   background-color: ${({ theme }) =>
     theme.scheme === "light" ? "white" : theme.colors.gray4};
-  a {
+  a, .email-row {
     display: flex;
     padding: 0.75rem;
     gap: 0.75rem;

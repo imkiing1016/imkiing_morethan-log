@@ -5,6 +5,7 @@ import { idToUuid } from "notion-utils"
 import getAllPageIds from "src/libs/utils/notion/getAllPageIds"
 import getPageProperties from "src/libs/utils/notion/getPageProperties"
 import { TPosts } from "src/types"
+import { customMapImageUrl } from "src/libs/utils/notion/customMapImageUrl"
 
 /**
  * notion.site API는 표준 notion-client가 기대하는 것보다
@@ -26,6 +27,36 @@ const normalizeResponse = (response: any): any => {
   normalizeMap(response.collection_view)
 
   return response
+}
+
+/**
+ * 페이지의 커버 이미지 또는 본문 첫 번째 이미지를 추출
+ */
+const extractThumbnail = (pageBlock: any, block: any): string | undefined => {
+  try {
+    // 1. 페이지 커버 이미지
+    const pageCover = pageBlock?.format?.page_cover
+    if (pageCover) {
+      return customMapImageUrl(pageCover, pageBlock)
+    }
+
+    // 2. 본문 첫 번째 이미지 블록
+    const contentIds = pageBlock?.content || []
+    for (const childId of contentIds) {
+      const childBlock = block[childId]?.value
+      if (childBlock?.type === "image") {
+        const source =
+          childBlock?.properties?.source?.[0]?.[0] ||
+          childBlock?.format?.display_source
+        if (source) {
+          return customMapImageUrl(source, childBlock)
+        }
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return undefined
 }
 
 /**
@@ -66,6 +97,11 @@ export const getPosts = async () => {
       ).toString()
       properties.fullWidth =
         (block[id].value?.format as any)?.page_full_width ?? false
+
+      // thumbnail이 없으면 커버 이미지 또는 본문 첫 이미지 사용
+      if (!properties.thumbnail) {
+        properties.thumbnail = extractThumbnail(block[id].value, block)
+      }
 
       data.push(properties)
     }

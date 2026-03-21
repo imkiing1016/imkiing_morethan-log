@@ -1,6 +1,9 @@
 import styled from "@emotion/styled"
-import Image from "next/image"
 import React, { useState, useCallback } from "react"
+
+const FRAME_SIZE = 64
+const TOTAL_FRAMES = 4
+const ROW_INDEX = 2 // 3번째 행 (오른쪽 방향), 0-indexed
 
 const Dino: React.FC = () => {
   const [jumping, setJumping] = useState(false)
@@ -15,10 +18,8 @@ const Dino: React.FC = () => {
     <StyledWrapper onClick={handleClick}>
       <div className="scene">
         <div className="ground" />
-        <div className={`dino-wrap ${jumping ? "jump" : ""}`}>
-          <div className={`dino-img ${jumping ? "" : "run"}`}>
-            <Image src="/dino.png" width={44} height={46} alt="dino" />
-          </div>
+        <div className={`pikachu-wrap ${jumping ? "jump" : ""}`}>
+          <div className={`pikachu ${jumping ? "" : "walk"}`} />
         </div>
       </div>
     </StyledWrapper>
@@ -47,36 +48,43 @@ const StyledWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.gray6};
   }
 
-  .dino-wrap {
+  .pikachu-wrap {
     position: absolute;
     bottom: 9px;
     left: 50%;
     transform: translateX(-50%);
 
     &.jump {
-      animation: dinoJump 0.5s ease;
+      animation: pikachuJump 0.5s ease;
     }
   }
 
-  .dino-img {
-    &.run {
-      animation: dinoRun 0.3s steps(2) infinite;
-    }
+  .pikachu {
+    width: ${FRAME_SIZE}px;
+    height: ${FRAME_SIZE}px;
+    background-image: url('/pikachu_sprite.png');
+    background-size: ${FRAME_SIZE * TOTAL_FRAMES}px ${FRAME_SIZE * TOTAL_FRAMES}px;
+    background-repeat: no-repeat;
+    background-position: 0px -${FRAME_SIZE * ROW_INDEX}px;
+    image-rendering: pixelated;
 
-    img {
-      display: block;
+    &.walk {
+      animation: pikachuWalk 0.6s steps(${TOTAL_FRAMES}) infinite;
     }
   }
 
-  @keyframes dinoJump {
+  @keyframes pikachuJump {
     0% { bottom: 9px; }
     40% { bottom: 55px; }
     100% { bottom: 9px; }
   }
 
-  @keyframes dinoRun {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-2px); }
-    100% { transform: translateY(0); }
+  @keyframes pikachuWalk {
+    from {
+      background-position: 0px -${FRAME_SIZE * ROW_INDEX}px;
+    }
+    to {
+      background-position: -${FRAME_SIZE * TOTAL_FRAMES}px -${FRAME_SIZE * ROW_INDEX}px;
+    }
   }
 `

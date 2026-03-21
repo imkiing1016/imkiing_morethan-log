@@ -12,7 +12,7 @@ import { TPosts } from "src/types"
  * 예: block[id].value.type → block[id].value.value.type
  * 이 함수로 응답을 정규화합니다.
  */
-const normalizeResponse = (response: any) => {
+const normalizeResponse = (response: any): any => {
   const normalizeMap = (map: Record<string, any>) => {
     for (const [key, val] of Object.entries(map || {})) {
       if (val?.value?.value) {
@@ -41,7 +41,7 @@ export const getPosts = async () => {
 
   const response = normalizeResponse(await api.getPage(id))
   id = idToUuid(id)
-  const collection = Object.values(response.collection)[0]?.value
+  const collection = (Object.values(response.collection)[0] as any)?.value
   const block = response.block
   const schema = collection?.schema
 

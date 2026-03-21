@@ -18,35 +18,52 @@ export const getPosts = async () => {
   })
 
   console.log("[getPosts] pageId:", id)
-  console.log("[getPosts] apiBaseUrl: https://grandiose-lift-6b1.notion.site/api/v3")
 
   try {
     const response = await api.getPage(id)
-    console.log("[getPosts] response keys:", Object.keys(response))
-    console.log("[getPosts] collection keys:", Object.keys(response.collection || {}))
-    console.log("[getPosts] block keys count:", Object.keys(response.block || {}).length)
 
     id = idToUuid(id)
-    console.log("[getPosts] uuid:", id)
 
-    const collection = Object.values(response.collection)[0]?.value
+    const collectionEntry = Object.values(response.collection)[0]
+    console.log("[getPosts] collectionEntry keys:", Object.keys(collectionEntry || {}))
+    console.log("[getPosts] collectionEntry.value keys:", Object.keys(collectionEntry?.value || {}))
+    console.log("[getPosts] collectionEntry.value.schema sample:", JSON.stringify(collectionEntry?.value?.schema)?.substring(0, 200))
+
+    const blockValue = response.block[id]?.value
+    console.log("[getPosts] block[id].value keys:", Object.keys(blockValue || {}))
+    console.log("[getPosts] block[id] keys:", Object.keys(response.block[id] || {}))
+    console.log("[getPosts] block[id] full:", JSON.stringify(response.block[id])?.substring(0, 500))
+
+    // Try to find the correct block with collection_view type
+    const allBlockTypes = Object.entries(response.block).map(([key, val]: [string, any]) => ({
+      id: key,
+      type: val?.value?.type,
+      hasValue: !!val?.value,
+    }))
+    console.log("[getPosts] all block types:", JSON.stringify(allBlockTypes.filter(b => b.type).slice(0, 10)))
+
+    const collection = collectionEntry?.value
     const block = response.block
     const schema = collection?.schema
 
-    console.log("[getPosts] collection exists:", !!collection)
-    console.log("[getPosts] schema exists:", !!schema)
-
     const rawMetadata = block[id]?.value
-    console.log("[getPosts] rawMetadata type:", rawMetadata?.type)
-    console.log("[getPosts] rawMetadata exists:", !!rawMetadata)
 
     // Check Type
     if (
       rawMetadata?.type !== "collection_view_page" &&
       rawMetadata?.type !== "collection_view"
     ) {
-      console.log("[getPosts] Type check FAILED - returning empty array")
-      console.log("[getPosts] Available block ids:", Object.keys(block).slice(0, 5))
+      console.log("[getPosts] Type check FAILED")
+      console.log("[getPosts] Trying to find collection_view block...")
+
+      // Try to find any block with collection_view_page or collection_view type
+      const cvBlock = Object.entries(block).find(([, val]: [string, any]) =>
+        val?.value?.type === "collection_view_page" || val?.value?.type === "collection_view"
+      )
+      if (cvBlock) {
+        console.log("[getPosts] Found collection_view block:", cvBlock[0], "type:", (cvBlock[1] as any)?.value?.type)
+      }
+
       return []
     } else {
       // Construct Data

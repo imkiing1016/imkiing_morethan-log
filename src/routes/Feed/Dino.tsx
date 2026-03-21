@@ -1,10 +1,6 @@
 import styled from "@emotion/styled"
 import React, { useState, useCallback } from "react"
 
-const FRAME_SIZE = 64
-const TOTAL_FRAMES = 4
-const ROW_INDEX = 2 // 3번째 행 (오른쪽 방향), 0-indexed
-
 const Dino: React.FC = () => {
   const [jumping, setJumping] = useState(false)
 
@@ -60,16 +56,16 @@ const StyledWrapper = styled.div`
   }
 
   .pikachu {
-    width: ${FRAME_SIZE}px;
-    height: ${FRAME_SIZE}px;
+    width: 64px;
+    height: 64px;
     background-image: url('/pikachu_sprite.png');
-    background-size: ${FRAME_SIZE * TOTAL_FRAMES}px ${FRAME_SIZE * TOTAL_FRAMES}px;
+    background-size: 256px 256px;
     background-repeat: no-repeat;
-    background-position: 0px -${FRAME_SIZE * ROW_INDEX}px;
+    background-position: 0px -128px;
     image-rendering: pixelated;
 
     &.walk {
-      animation: pikachuWalk 0.6s steps(${TOTAL_FRAMES}) infinite;
+      animation: pikachuWalk 0.6s steps(4) infinite;
     }
   }
 
@@ -81,10 +77,10 @@ const StyledWrapper = styled.div`
 
   @keyframes pikachuWalk {
     from {
-      background-position: 0px -${FRAME_SIZE * ROW_INDEX}px;
+      background-position: 0px -128px;
     }
     to {
-      background-position: -${FRAME_SIZE * TOTAL_FRAMES}px -${FRAME_SIZE * ROW_INDEX}px;
+      background-position: -256px -128px;
     }
   }
 `

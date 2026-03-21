@@ -82,7 +82,7 @@ const StyledWrapper = styled.div`
     display: none;
     overflow: scroll;
     position: sticky;
-    grid-column: span 3 / span 3;
+    grid-column: span 2 / span 2;
     top: ${HEADER_HEIGHT - 10}px;
 
     scrollbar-width: none;
@@ -100,7 +100,7 @@ const StyledWrapper = styled.div`
     grid-column: span 12 / span 12;
 
     @media (min-width: 1024px) {
-      grid-column: span 6 / span 6;
+      grid-column: span 7 / span 7;
     }
 
     > .mobile-categories {

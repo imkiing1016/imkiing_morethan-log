@@ -18,45 +18,46 @@ const ProfileCard: React.FC<Props> = () => {
         <Emoji>💻</Emoji> Profile
       </div>
       <div className="content">
-        <div className="avatar">
-          <Image src={CONFIG.profile.image} width={120} height={120} alt="" />
+        <div className="bg-image">
+          <Image src={CONFIG.profile.image} fill alt="" />
         </div>
-        <div className="info">
+        <div className="overlay" />
+        <div className="info-layer">
           <div className="name">{CONFIG.profile.name}</div>
           <div className="role">{CONFIG.profile.role}</div>
           <div className="bio">{CONFIG.profile.bio}</div>
-        </div>
-        <div className="social">
-          {CONFIG.profile.github && (
-            <a
-              href={`https://github.com/${CONFIG.profile.github}`}
-              rel="noreferrer"
-              target="_blank"
-              aria-label="GitHub"
-            >
-              <AiOutlineGithub />
-            </a>
-          )}
-          {CONFIG.profile.email && (
-            <a
-              href={`mailto:${CONFIG.profile.email}`}
-              rel="noreferrer"
-              target="_blank"
-              aria-label="Email"
-            >
-              <AiOutlineMail />
-            </a>
-          )}
-          {CONFIG.profile.instagram && (
-            <a
-              href={`https://www.instagram.com/${CONFIG.profile.instagram}`}
-              rel="noreferrer"
-              target="_blank"
-              aria-label="Instagram"
-            >
-              <AiOutlineInstagram />
-            </a>
-          )}
+          <div className="social">
+            {CONFIG.profile.github && (
+              <a
+                href={`https://github.com/${CONFIG.profile.github}`}
+                rel="noreferrer"
+                target="_blank"
+                aria-label="GitHub"
+              >
+                <AiOutlineGithub />
+              </a>
+            )}
+            {CONFIG.profile.email && (
+              <a
+                href={`mailto:${CONFIG.profile.email}`}
+                rel="noreferrer"
+                target="_blank"
+                aria-label="Email"
+              >
+                <AiOutlineMail />
+              </a>
+            )}
+            {CONFIG.profile.instagram && (
+              <a
+                href={`https://www.instagram.com/${CONFIG.profile.instagram}`}
+                rel="noreferrer"
+                target="_blank"
+                aria-label="Instagram"
+              >
+                <AiOutlineInstagram />
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </StyledWrapper>
@@ -71,41 +72,48 @@ const StyledWrapper = styled.div`
     margin-bottom: 0.75rem;
   }
   > .content {
+    position: relative;
     margin-bottom: 2.25rem;
     border-radius: 1rem;
     width: 100%;
-    background: ${({ theme }) =>
-      theme.scheme === "light"
-        ? "linear-gradient(135deg, #ffffff 0%, #fff7ed 100%)"
-        : `linear-gradient(135deg, ${theme.colors.gray4} 0%, rgba(234, 88, 12, 0.08) 100%)`};
-    padding: 1.5rem 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    overflow: hidden;
+    min-height: 280px;
 
-    .avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin-bottom: 1rem;
-      border: 3px solid rgba(234, 88, 12, 0.3);
+    .bg-image {
+      position: absolute;
+      inset: 0;
+      opacity: 0.25;
 
       img {
         object-fit: cover;
+        object-position: center;
       }
     }
 
-    .info {
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: ${({ theme }) =>
+        theme.scheme === "light"
+          ? "linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.85) 100%)"
+          : "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.75) 100%)"};
+    }
+
+    .info-layer {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 1rem;
+      justify-content: flex-end;
+      padding: 1.5rem 1rem;
+      min-height: 280px;
 
       .name {
-        font-size: 1.25rem;
-        line-height: 1.75rem;
+        font-size: 1.5rem;
+        line-height: 2rem;
         font-weight: 700;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
       }
       .role {
         margin-bottom: 0.5rem;
@@ -118,29 +126,33 @@ const StyledWrapper = styled.div`
         line-height: 1.25rem;
         text-align: center;
         color: ${({ theme }) => theme.colors.gray10};
+        margin-bottom: 1rem;
       }
-    }
 
-    .social {
-      display: flex;
-      gap: 0.75rem;
-
-      a {
+      .social {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.25rem;
-        height: 2.25rem;
-        border-radius: 50%;
-        font-size: 1.25rem;
-        color: ${({ theme }) => theme.colors.gray11};
-        background-color: ${({ theme }) => theme.colors.gray3};
-        transition: all 0.2s ease;
+        gap: 0.75rem;
 
-        &:hover {
-          color: rgb(234, 88, 12);
-          background-color: ${({ theme }) => theme.colors.gray5};
-          transform: translateY(-2px);
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.25rem;
+          height: 2.25rem;
+          border-radius: 50%;
+          font-size: 1.25rem;
+          color: ${({ theme }) => theme.colors.gray11};
+          background-color: ${({ theme }) =>
+            theme.scheme === "light"
+              ? "rgba(255, 255, 255, 0.7)"
+              : "rgba(255, 255, 255, 0.1)"};
+          backdrop-filter: blur(4px);
+          transition: all 0.2s ease;
+
+          &:hover {
+            color: rgb(234, 88, 12);
+            transform: translateY(-2px);
+          }
         }
       }
     }

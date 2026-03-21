@@ -54,13 +54,18 @@ const AboutPage: NextPageWithLayout = () => {
       <div className="about-content">
         <h2>안녕하세요!</h2>
         <p>
-          방문해 주셔서 감사합니다. 저는 <strong>{CONFIG.profile.role}</strong>을 꿈꾸고 있는 <strong>{CONFIG.profile.name}</strong>입니다.
+          방문해 주셔서 감사합니다.
+        </p>
+        <p>
+          저는 <strong>{CONFIG.profile.role}</strong>를 꿈꾸고 있는 <strong>{CONFIG.profile.name}</strong>입니다.
         </p>
         <p>
           {CONFIG.profile.bio}
         </p>
         <p>
           이 블로그는 제가 공부하고 연구한 내용을 기록하는 공간입니다.
+        </p>
+        <p>
           궁금한 점이나 피드백이 있으시면 언제든 연락해 주세요!
         </p>
       </div>

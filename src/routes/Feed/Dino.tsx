@@ -15,7 +15,10 @@ const Dino: React.FC = () => {
       <div className="scene">
         <div className="ground" />
         <div className={`pikachu-wrap ${jumping ? "jump" : ""}`}>
-          <div className={`pikachu ${jumping ? "" : "walk"}`} />
+          <div className={`sprite-viewport ${jumping ? "" : "walk"}`}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/pikachu_sprite.png" alt="pikachu" />
+          </div>
         </div>
       </div>
     </StyledWrapper>
@@ -55,16 +58,21 @@ const StyledWrapper = styled.div`
     }
   }
 
-  .pikachu {
+  .sprite-viewport {
     width: 64px;
     height: 64px;
-    background-image: url('/pikachu_sprite.png');
-    background-size: 256px 256px;
-    background-repeat: no-repeat;
-    background-position: 0px -128px;
-    image-rendering: pixelated;
+    overflow: hidden;
 
-    &.walk {
+    img {
+      display: block;
+      width: 256px;
+      height: 256px;
+      object-fit: none;
+      object-position: 0px -128px;
+      image-rendering: pixelated;
+    }
+
+    &.walk img {
       animation: pikachuWalk 0.6s steps(4) infinite;
     }
   }
@@ -77,10 +85,10 @@ const StyledWrapper = styled.div`
 
   @keyframes pikachuWalk {
     from {
-      background-position: 0px -128px;
+      object-position: 0px -128px;
     }
     to {
-      background-position: -256px -128px;
+      object-position: -256px -128px;
     }
   }
 `

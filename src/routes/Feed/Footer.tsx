@@ -1,25 +1,22 @@
-import { CONFIG } from "site.config"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import styled from "@emotion/styled"
-
-const d = new Date()
-const y = d.getFullYear()
-const from = +CONFIG.since
 
 type Props = {
   className?: string
 }
 
 const Footer: React.FC<Props> = ({ className }) => {
+  const [lastVisited, setLastVisited] = useState<string>("")
+
+  useEffect(() => {
+    const now = new Date()
+    const formatted = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}.${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`
+    setLastVisited(formatted)
+  }, [])
+
   return (
     <StyledWrapper className={className}>
-      <a
-        href={`https://github.com/${CONFIG.profile.github}`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        © {CONFIG.profile.name} {from === y || !from ? y : `${from} - ${y}`}
-      </a>
+      <span>마지막 방문: {lastVisited}</span>
     </StyledWrapper>
   )
 }
@@ -27,7 +24,7 @@ const Footer: React.FC<Props> = ({ className }) => {
 export default Footer
 
 const StyledWrapper = styled.div`
-  a {
+  span {
     margin-top: 0.75rem;
     font-size: 0.875rem;
     line-height: 1.25rem;

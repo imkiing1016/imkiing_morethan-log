@@ -5,7 +5,7 @@ const CONFIG = {
     image: "/avatar.png",
     role: "게임 기획자",
     bio: "전투 기획을 공부하고, 연구하고 있습니다.",
-    email: "imkiing",
+    email: "imkiing@naver.com",
     linkedin: "",
     github: "imkiing1016",
     instagram: "",

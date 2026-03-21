@@ -77,21 +77,16 @@ const StyledWrapper = styled.div`
 
   > .card-wrapper {
     margin-bottom: 2.25rem;
-    perspective: 600px;
 
     .photo-card {
       border-radius: 1rem;
       overflow: hidden;
-      background: ${({ theme }) =>
-        theme.scheme === "light"
-          ? "linear-gradient(145deg, #e0f2fe 0%, #bae6fd 50%, #e0f7fa 100%)"
-          : "linear-gradient(145deg, #1e3a5f 0%, #1a2744 50%, #1e293b 100%)"};
       box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.15),
         0 2px 8px -2px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
 
       &:hover {
-        transform: translateY(-4px) rotateX(2deg);
+        transform: translateY(-4px);
         box-shadow: 0 16px 32px -6px rgba(0, 0, 0, 0.2),
           0 4px 12px -2px rgba(0, 0, 0, 0.1);
       }
@@ -100,6 +95,7 @@ const StyledWrapper = styled.div`
         position: relative;
         width: 100%;
         padding-bottom: 110%;
+        background-color: #ffffff;
 
         img {
           object-fit: cover;
@@ -113,6 +109,7 @@ const StyledWrapper = styled.div`
         flex-direction: column;
         align-items: center;
         gap: 0.25rem;
+        background-color: #111111;
 
         .name-badge {
           margin-bottom: 0.25rem;
@@ -132,14 +129,14 @@ const StyledWrapper = styled.div`
         .role {
           font-size: 0.8rem;
           line-height: 1.25rem;
-          color: ${({ theme }) => theme.colors.gray11};
+          color: rgba(255, 255, 255, 0.7);
         }
 
         .bio {
           font-size: 0.8rem;
           line-height: 1.25rem;
           text-align: center;
-          color: ${({ theme }) => theme.colors.gray10};
+          color: rgba(255, 255, 255, 0.55);
           margin-bottom: 0.5rem;
         }
 
@@ -155,11 +152,8 @@ const StyledWrapper = styled.div`
             height: 2rem;
             border-radius: 50%;
             font-size: 1.1rem;
-            color: ${({ theme }) => theme.colors.gray11};
-            background-color: ${({ theme }) =>
-              theme.scheme === "light"
-                ? "rgba(255, 255, 255, 0.7)"
-                : "rgba(255, 255, 255, 0.1)"};
+            color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.1);
             transition: all 0.2s ease;
 
             &:hover {

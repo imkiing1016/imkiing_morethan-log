@@ -28,8 +28,17 @@ const StyledWrapper = styled.div`
   z-index: ${zIndexes.header};
   position: sticky;
   top: 0;
-  background-color: ${({ theme }) => theme.colors.gray2};
+  background-color: ${({ theme }) =>
+    theme.scheme === "light"
+      ? "rgba(255, 255, 255, 0.8)"
+      : "rgba(17, 17, 17, 0.8)"};
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid ${({ theme }) =>
+    theme.scheme === "light"
+      ? "rgba(0, 0, 0, 0.06)"
+      : "rgba(255, 255, 255, 0.06)"};
 
   .container {
     display: flex;

@@ -69,17 +69,21 @@ const StyledWrapper = styled(Link)`
     border-radius: 1rem;
     background-color: ${({ theme }) =>
       theme.scheme === "light" ? "white" : theme.colors.gray4};
-    transition-property: box-shadow;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     @media (min-width: 768px) {
       margin-bottom: 2rem;
     }
 
     :hover {
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15),
+        0 4px 8px -4px rgba(0, 0, 0, 0.08);
+
+      > .thumbnail img {
+        transform: scale(1.03);
+      }
     }
     > .category {
       position: absolute;
@@ -93,6 +97,11 @@ const StyledWrapper = styled(Link)`
       width: 100%;
       background-color: ${({ theme }) => theme.colors.gray2};
       padding-bottom: 66%;
+      overflow: hidden;
+
+      img {
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
 
       @media (min-width: 1024px) {
         padding-bottom: 50%;

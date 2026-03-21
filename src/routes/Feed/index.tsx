@@ -33,6 +33,9 @@ const Feed: React.FC<Props> = () => {
       </div>
       <div className="mid">
         <MobileProfileCard />
+        <div className="mobile-categories">
+          <CategoryList />
+        </div>
         <PinnedPosts q={q} />
         <SearchInput value={q} onChange={(e) => setQ(e.target.value)} />
         <div className="tags">
@@ -79,7 +82,7 @@ const StyledWrapper = styled.div`
     display: none;
     overflow: scroll;
     position: sticky;
-    grid-column: span 2 / span 2;
+    grid-column: span 3 / span 3;
     top: ${HEADER_HEIGHT - 10}px;
 
     scrollbar-width: none;
@@ -97,7 +100,16 @@ const StyledWrapper = styled.div`
     grid-column: span 12 / span 12;
 
     @media (min-width: 1024px) {
-      grid-column: span 7 / span 7;
+      grid-column: span 6 / span 6;
+    }
+
+    > .mobile-categories {
+      display: block;
+      margin-bottom: 1rem;
+
+      @media (min-width: 1024px) {
+        display: none;
+      }
     }
 
     > .tags {

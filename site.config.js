@@ -72,9 +72,4 @@ const CONFIG = {
   revalidateTime: 21600 * 7, // revalidate time for [slug], index
 }
 
-module.exports = {
-  rootNotionPageId: "2ee8a4873d11815b9de8c1b26966b3ae?v=2ee8a4873d11815891fa000cc67bd71d&source=copy_link",
-  domain: "morethan-log.vercel.app",
-  name: "나만의 작은 아카이브",
-  author: "imkiing",
-}
+module.exports = { CONFIG }

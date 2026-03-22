@@ -29,14 +29,18 @@ const Detail: React.FC<Props> = () => {
 export default Detail
 
 const StyledWrapper = styled.div`
-  padding: 2rem 0 8rem;
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  padding: 5rem 1rem 8rem;
   cursor: pointer;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  z-index: 29;
 
   &[data-type="Paper"] {
-    padding: 40px 0 8rem;
+    padding: 5rem 1rem 8rem;
   }
   /** Reference: https://github.com/chriskempson/tomorrow-theme **/
   code[class*="language-mermaid"],

@@ -40,9 +40,17 @@ const Detail: React.FC<Props> = () => {
 export default Detail
 
 const StyledWrapper = styled.div`
-  padding: 2rem 0;
+  padding: 2rem 1.5rem;
   min-height: 100vh;
   cursor: pointer;
+
+  @media (min-width: 768px) {
+    padding: 2rem 3rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 2rem 4rem;
+  }
 
   > .content-area {
     cursor: default;
@@ -51,7 +59,8 @@ const StyledWrapper = styled.div`
   }
 
   &[data-type="Paper"] {
-    padding: 40px 0;
+    padding-top: 40px;
+    padding-bottom: 40px;
   }
   /** Reference: https://github.com/chriskempson/tomorrow-theme **/
   code[class*="language-mermaid"],

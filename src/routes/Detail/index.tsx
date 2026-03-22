@@ -29,7 +29,7 @@ const Detail: React.FC<Props> = () => {
   if (!data) return null
   return (
     <StyledWrapper data-type={data.type} onClick={handleBackdropClick}>
-      <div ref={contentRef}>
+      <div className="content-area" ref={contentRef}>
         {data.type[0] === "Page" && <PageDetail />}
         {data.type[0] !== "Page" && <PostDetail />}
       </div>
@@ -44,8 +44,10 @@ const StyledWrapper = styled.div`
   min-height: 100vh;
   cursor: pointer;
 
-  > div {
+  > .content-area {
     cursor: default;
+    max-width: 56rem;
+    margin: 0 auto;
   }
 
   &[data-type="Paper"] {

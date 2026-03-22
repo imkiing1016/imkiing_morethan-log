@@ -17,7 +17,7 @@ const PostDetail: React.FC<Props> = () => {
   const category = (data.category && data.category?.[0]) || undefined
 
   return (
-    <StyledWrapper onClick={(e) => e.stopPropagation()}>
+    <StyledWrapper data-post-card>
       <article>
         {category && (
           <div css={{ marginBottom: "0.5rem" }}>

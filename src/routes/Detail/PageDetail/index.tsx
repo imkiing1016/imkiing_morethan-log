@@ -9,7 +9,7 @@ const PageDetail: React.FC<Props> = () => {
 
   if (!data) return null
   return (
-    <StyledWrapper onClick={(e) => e.stopPropagation()}>
+    <StyledWrapper data-post-card>
       <NotionRenderer recordMap={data.recordMap} />
     </StyledWrapper>
   )

@@ -22,6 +22,7 @@ const Detail: React.FC<Props> = () => {
     <StyledWrapper data-type={data.type} onClick={handleBackdropClick}>
       {data.type[0] === "Page" && <PageDetail />}
       {data.type[0] !== "Page" && <PostDetail />}
+      <div className="bottom-tap-area" />
     </StyledWrapper>
   )
 }
@@ -35,12 +36,18 @@ const StyledWrapper = styled.div`
   right: 0;
   bottom: 0;
   overflow-y: auto;
-  padding: 5rem 1rem 8rem;
+  -webkit-overflow-scrolling: touch;
+  padding: 5rem 1rem 0;
   cursor: pointer;
   z-index: 29;
 
+  .bottom-tap-area {
+    width: 100%;
+    min-height: 50vh;
+  }
+
   &[data-type="Paper"] {
-    padding: 5rem 1rem 8rem;
+    padding-top: 5rem;
   }
   /** Reference: https://github.com/chriskempson/tomorrow-theme **/
   code[class*="language-mermaid"],

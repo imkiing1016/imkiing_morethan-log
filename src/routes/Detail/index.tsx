@@ -43,6 +43,8 @@ const StyledWrapper = styled.div`
   cursor: pointer;
 
   > .content-area {
+    max-width: 56rem;
+    margin: 0 auto;
     cursor: default;
   }
 

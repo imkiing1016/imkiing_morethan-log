@@ -9,7 +9,7 @@ const PageDetail: React.FC<Props> = () => {
 
   if (!data) return null
   return (
-    <StyledWrapper>
+    <StyledWrapper onClick={(e) => e.stopPropagation()}>
       <NotionRenderer recordMap={data.recordMap} />
     </StyledWrapper>
   )
@@ -20,4 +20,5 @@ export default PageDetail
 const StyledWrapper = styled.div`
   margin: 0 auto;
   max-width: 56rem;
+  cursor: default;
 `

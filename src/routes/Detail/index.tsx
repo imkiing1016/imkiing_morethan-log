@@ -17,20 +17,11 @@ const Detail: React.FC<Props> = () => {
     router.push("/")
   }, [router])
 
-  const handleContentClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      e.stopPropagation()
-    },
-    []
-  )
-
   if (!data) return null
   return (
     <StyledWrapper data-type={data.type} onClick={handleBackdropClick}>
-      <div className="content-area" onClick={handleContentClick}>
-        {data.type[0] === "Page" && <PageDetail />}
-        {data.type[0] !== "Page" && <PostDetail />}
-      </div>
+      {data.type[0] === "Page" && <PageDetail />}
+      {data.type[0] !== "Page" && <PostDetail />}
     </StyledWrapper>
   )
 }
@@ -41,12 +32,6 @@ const StyledWrapper = styled.div`
   padding: 2rem 0;
   min-height: 100vh;
   cursor: pointer;
-
-  > .content-area {
-    max-width: 56rem;
-    margin: 0 auto;
-    cursor: default;
-  }
 
   &[data-type="Paper"] {
     padding: 40px 0;

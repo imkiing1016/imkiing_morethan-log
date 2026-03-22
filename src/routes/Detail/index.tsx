@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useEffect, useRef, useCallback } from "react"
 import { useRouter } from "next/router"
 import useMermaidEffect from "./hooks/useMermaidEffect"
 import PostDetail from "./PostDetail"
@@ -11,15 +11,30 @@ type Props = {}
 const Detail: React.FC<Props> = () => {
   const data = usePostQuery()
   const router = useRouter()
+  const wrapperRef = useRef<HTMLDivElement>(null)
   useMermaidEffect()
 
-  const handleBackdropClick = useCallback(() => {
+  const goHome = useCallback(() => {
     router.push("/")
   }, [router])
 
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      // 포스트 카드 내부 클릭이면 무시
+      if (target.closest("[data-post-card]")) return
+      // Detail overlay 영역 내부 클릭만 처리
+      if (wrapperRef.current?.contains(target)) {
+        goHome()
+      }
+    }
+    document.addEventListener("click", handleClick)
+    return () => document.removeEventListener("click", handleClick)
+  }, [goHome])
+
   if (!data) return null
   return (
-    <StyledWrapper data-type={data.type} onClick={handleBackdropClick}>
+    <StyledWrapper ref={wrapperRef} data-type={data.type}>
       {data.type[0] === "Page" && <PageDetail />}
       {data.type[0] !== "Page" && <PostDetail />}
       <div className="bottom-tap-area" />

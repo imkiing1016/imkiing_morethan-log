@@ -39,6 +39,9 @@ const Feed: React.FC<Props> = () => {
       </div>
       <div className="mid">
         <MobileProfileCard />
+        <div className="mobile-dino">
+          <Dino />
+        </div>
         <div className="mobile-categories">
           <CategoryList />
         </div>
@@ -119,6 +122,15 @@ const StyledWrapper = styled.div`
 
     @media (min-width: 1024px) {
       grid-column: span 7 / span 7;
+    }
+
+    > .mobile-dino {
+      display: block;
+      margin-bottom: 1rem;
+
+      @media (min-width: 1024px) {
+        display: none;
+      }
     }
 
     > .mobile-categories {

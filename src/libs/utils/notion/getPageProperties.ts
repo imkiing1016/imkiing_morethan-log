@@ -57,18 +57,24 @@ async function getPageProperties(
           for (let i = 0; i < rawUsers.length; i++) {
             if (rawUsers[i][0][1]) {
               const userId = rawUsers[i][0]
-              const res: any = await api.getUsers(userId)
-              const resValue =
-                res?.recordMapWithRoles?.notion_user?.[userId[1]]?.value
-              const user = {
-                id: resValue?.id,
-                name:
-                  resValue?.name ||
-                  `${resValue?.family_name}${resValue?.given_name}` ||
-                  undefined,
-                profile_photo: resValue?.profile_photo || null,
+              try {
+                const res: any = await api.getUsers(userId)
+                const resValue =
+                  res?.recordMapWithRoles?.notion_user?.[userId[1]]?.value
+                if (resValue) {
+                  const user = {
+                    id: resValue.id || null,
+                    name:
+                      resValue.name ||
+                      `${resValue.family_name || ""}${resValue.given_name || ""}` ||
+                      null,
+                    profile_photo: resValue.profile_photo || null,
+                  }
+                  users.push(user)
+                }
+              } catch (error) {
+                // Notion API 사용자 조회 실패 시 건너뜀
               }
-              users.push(user)
             }
           }
           properties[schema[key].name] = users

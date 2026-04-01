@@ -18,12 +18,20 @@ const filter: FilterPostsOptions = {
 }
 
 export const getStaticPaths = async () => {
-  const posts = await getPosts()
-  const filteredPost = filterPosts(posts, filter)
+  try {
+    const posts = await getPosts()
+    const filteredPost = filterPosts(posts, filter)
 
-  return {
-    paths: filteredPost.map((row) => `/${row.slug}`),
-    fallback: true,
+    return {
+      paths: filteredPost.map((row) => `/${row.slug}`),
+      fallback: true,
+    }
+  } catch (error) {
+    console.error("[getStaticPaths] Error fetching posts:", error)
+    return {
+      paths: [],
+      fallback: true,
+    }
   }
 }
 

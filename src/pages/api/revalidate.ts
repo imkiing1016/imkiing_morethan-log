@@ -1,15 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { getPosts } from "../../apis"
 
-// for all path revalidate, https://<your-site.com>/api/revalidate?secret=<token>
-// for specific path revalidate, https://<your-site.com>/api/revalidate?secret=<token>&path=<path>
-// example, https://<your-site.com>/api/revalidate?secret=이것은_키&path=feed
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { secret, path } = req.query
-  if (secret !== process.env.TOKEN_FOR_REVALIDATE) {
+  const token = process.env.TOKEN_FOR_REVALIDATE
+
+  if (!token || !secret || secret !== token) {
     return res.status(401).json({ message: "Invalid token" })
   }
 

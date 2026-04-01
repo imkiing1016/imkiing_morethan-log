@@ -30,20 +30,20 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const slug = context.params?.slug
 
-  const posts = await getPosts()
-  const feedPosts = filterPosts(posts)
-  await queryClient.prefetchQuery(queryKey.posts(), () => feedPosts)
-
-  const detailPosts = filterPosts(posts, filter)
-  const postDetail = detailPosts.find((t: any) => t.slug === slug)
-
-  if (!postDetail) {
-    return {
-      notFound: true,
-    }
-  }
-
   try {
+    const posts = await getPosts()
+    const feedPosts = filterPosts(posts)
+    await queryClient.prefetchQuery(queryKey.posts(), () => feedPosts)
+
+    const detailPosts = filterPosts(posts, filter)
+    const postDetail = detailPosts.find((t: any) => t.slug === slug)
+
+    if (!postDetail) {
+      return {
+        notFound: true,
+      }
+    }
+
     const recordMap = await getRecordMap(postDetail.id)
 
     await queryClient.prefetchQuery(queryKey.post(`${slug}`), () => ({
@@ -58,7 +58,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       revalidate: CONFIG.revalidateTime,
     }
   } catch (error) {
-    console.error(`[getStaticProps] Error fetching recordMap for "${slug}":`, error)
+    console.error(`[getStaticProps] Error for "${slug}":`, error)
     return {
       notFound: true,
     }

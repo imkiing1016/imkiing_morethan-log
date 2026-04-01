@@ -51,9 +51,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
       recordMap,
     }))
 
+    const dehydratedState = JSON.parse(JSON.stringify(dehydrate(queryClient)))
+
     return {
       props: {
-        dehydratedState: dehydrate(queryClient),
+        dehydratedState,
       },
       revalidate: CONFIG.revalidateTime,
     }

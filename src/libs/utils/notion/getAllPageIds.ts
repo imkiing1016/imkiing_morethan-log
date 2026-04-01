@@ -6,12 +6,15 @@ export default function getAllPageIds(
   viewId?: string
 ) {
   const collectionQuery = response.collection_query
+  if (!collectionQuery) return []
+
   const views = Object.values(collectionQuery)[0]
+  if (!views) return []
 
   let pageIds: ID[] = []
   if (viewId) {
     const vId = idToUuid(viewId)
-    pageIds = views[vId]?.blockIds
+    pageIds = views[vId]?.blockIds || []
   } else {
     const pageSet = new Set<ID>()
     // * type not exist

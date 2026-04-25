@@ -7,6 +7,40 @@ import getPageProperties from "src/libs/utils/notion/getPageProperties"
 import { TPosts } from "src/types"
 
 /**
+ * notion.site API는 표준 notion-client가 기대하는 것보다
+ * 한 단계 더 깊게 감싼 구조로 데이터를 반환합니다.
+ * 예: block[id].value.type → block[id].value.value.type
+ * 이 함수로 응답을 정규화합니다.
+ */
+const normalizeResponse = (response: any): any => {
+  const normalizeMap = (map: Record<string, any>) => {
+    for (const [key, val] of Object.entries(map || {})) {
+      if (val?.value?.value) {
+        map[key] = { value: val.value.value, role: val.value.role }
+      }
+    }
+  }
+
+  normalizeMap(response.block)
+  normalizeMap(response.collection)
+  normalizeMap(response.collection_view)
+
+  // collection_query: { collectionId: { viewId: { ... } } }
+  // notion.site에서는 collectionId 값이 { value: { value: viewMap, role } } 로 감싸질 수 있음
+  // getAllPageIds가 Object.values(cq)[0] 으로 직접 접근하므로 value.value를 꺼내야 함
+  for (const [key, val] of Object.entries(response.collection_query || {})) {
+    const v = val as any
+    if (v?.value?.value) {
+      response.collection_query[key] = v.value.value
+    } else if (v?.value && typeof v.value === "object" && !v.collection_group_results) {
+      response.collection_query[key] = v.value
+    }
+  }
+
+  return response
+}
+
+/**
  * @param {{ includePages: boolean }} - false: posts only / true: include pages
  */
 
@@ -17,15 +51,13 @@ export const getPosts = async () => {
     apiBaseUrl: "https://grandiose-lift-6b1.notion.site/api/v3",
   })
 
-  const response = await api.getPage(id)
+  const response = normalizeResponse(await api.getPage(id))
   id = idToUuid(id)
-  const collectionValue = Object.values(response.collection)[0]?.value as any
-  const collection = collectionValue?.value ?? collectionValue
+  const collection = (Object.values(response.collection)[0] as any)?.value
   const block = response.block
   const schema = collection?.schema
 
-  const blockValue = (block[id].value as any)?.value ?? block[id].value
-  const rawMetadata = blockValue
+  const rawMetadata = block[id].value
 
   // Check Type
   if (
@@ -41,12 +73,11 @@ export const getPosts = async () => {
       const id = pageIds[i]
       const properties = (await getPageProperties(id, block, schema)) || null
       // Add fullwidth, createdtime to properties
-      const pageBlockValue = (block[id].value as any)?.value ?? block[id].value
       properties.createdTime = new Date(
-        pageBlockValue?.created_time
+        block[id].value?.created_time
       ).toString()
       properties.fullWidth =
-        (pageBlockValue?.format as any)?.page_full_width ?? false
+        (block[id].value?.format as any)?.page_full_width ?? false
 
       data.push(properties)
     }

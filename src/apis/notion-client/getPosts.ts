@@ -7,28 +7,6 @@ import getPageProperties from "src/libs/utils/notion/getPageProperties"
 import { TPosts } from "src/types"
 
 /**
- * notion.site API는 표준 notion-client가 기대하는 것보다
- * 한 단계 더 깊게 감싼 구조로 데이터를 반환합니다.
- * 예: block[id].value.type → block[id].value.value.type
- * 이 함수로 응답을 정규화합니다.
- */
-const normalizeResponse = (response: any): any => {
-  const normalizeMap = (map: Record<string, any>) => {
-    for (const [key, val] of Object.entries(map || {})) {
-      if (val?.value?.value) {
-        map[key] = { value: val.value.value, role: val.value.role }
-      }
-    }
-  }
-
-  normalizeMap(response.block)
-  normalizeMap(response.collection)
-  normalizeMap(response.collection_view)
-
-  return response
-}
-
-/**
  * @param {{ includePages: boolean }} - false: posts only / true: include pages
  */
 
@@ -39,13 +17,15 @@ export const getPosts = async () => {
     apiBaseUrl: "https://grandiose-lift-6b1.notion.site/api/v3",
   })
 
-  const response = normalizeResponse(await api.getPage(id))
+  const response = await api.getPage(id)
   id = idToUuid(id)
-  const collection = (Object.values(response.collection)[0] as any)?.value
+  const collectionValue = Object.values(response.collection)[0]?.value as any
+  const collection = collectionValue?.value ?? collectionValue
   const block = response.block
   const schema = collection?.schema
 
-  const rawMetadata = block[id].value
+  const blockValue = (block[id].value as any)?.value ?? block[id].value
+  const rawMetadata = blockValue
 
   // Check Type
   if (
@@ -61,11 +41,12 @@ export const getPosts = async () => {
       const id = pageIds[i]
       const properties = (await getPageProperties(id, block, schema)) || null
       // Add fullwidth, createdtime to properties
+      const pageBlockValue = (block[id].value as any)?.value ?? block[id].value
       properties.createdTime = new Date(
-        block[id].value?.created_time
+        pageBlockValue?.created_time
       ).toString()
       properties.fullWidth =
-        (block[id].value?.format as any)?.page_full_width ?? false
+        (pageBlockValue?.format as any)?.page_full_width ?? false
 
       data.push(properties)
     }
